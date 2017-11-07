@@ -21,6 +21,11 @@ class WGLSpec(Spec):
     NAME = 'wgl'
 
 
+class VulkanSpec(Spec):
+    API = 'https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/1.0/src/spec/vk.xml'
+    NAME = 'vk'
+
+
 SPECIFICATIONS = dict()
 
 # reflection to fill SPECIFICATIONS

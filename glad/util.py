@@ -35,7 +35,8 @@ _API_SPEC_MAPPING = {
     'glsc2': 'gl',
     'egl': 'egl',
     'glx': 'glx',
-    'wgl': 'wgl'
+    'wgl': 'wgl',
+    'vulkan': 'vk'
 }
 
 

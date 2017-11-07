@@ -117,7 +117,7 @@ class Spec(object):
     def types(self):
         if self._types is None:
             self._types = OrderedDict()
-            for element in self.root.find('types').iter('type'):
+            for element in filter(lambda e: e.tag == 'type', iter(self.root.find('types'))):
                 t = Type(element)
                 if t.name not in self._types:
                     self._types[t.name] = list()
@@ -142,20 +142,20 @@ class Spec(object):
 
         self._enums = defaultdict(list)
         for element in self.root.iter('enums'):
-            namespace = element.attrib['namespace']
+            namespace = element.get('namespace')
             type_ = element.get('type')
             group = element.get('group')
             vendor = element.get('vendor')
             comment = element.get('comment', '')
 
             for enum in element:
-                if enum.tag == 'unused':
+                if enum.tag in ('unused', 'comment'):
                     continue
                 assert enum.tag == 'enum'
 
                 name = enum.attrib['name']
                 self._enums[name].append(
-                    Enum(name, enum.attrib['value'], enum.get('api'),
+                    Enum(name, enum.get('value'), enum.get('bitpos'), enum.get('api'),
                          namespace, type_, group, vendor, comment)
                 )
 
@@ -431,6 +431,7 @@ class Type(IdentifiedByName):
         self.raw = ''.join(element.itertext())
 
         self.api = element.get('api')
+        self.category = element.get('category')
         self.name = element.get('name') or element.find('name').text
         self.requires = element.get('requires')
 
@@ -444,10 +445,12 @@ class Type(IdentifiedByName):
 
 
 class Enum(IdentifiedByName):
-    def __init__(self, name, value, api, namespace,
+    def __init__(self, name, value, bitpos, api, namespace,
                  type_=None, group=None, vendor=None, comment=''):
         self.name = name
         self.value = value
+        if value is None:
+            self.value = 1 << int(bitpos)
         self.api = api
         self.namespace = namespace
         self.type = type_
@@ -463,7 +466,7 @@ class Enum(IdentifiedByName):
 class Command(IdentifiedByName):
     def __init__(self, element):
         self.proto = Proto(element.find('proto'))
-        self.params = [Param(ele) for ele in element.iter('param')]
+        self.params = [Param(ele) for ele in filter(lambda e: e.tag == 'param', iter(element))]
         self.alias = element.find('alias')
         if self.alias is not None:
             self.alias = self.alias.get('name')
