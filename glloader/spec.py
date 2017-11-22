@@ -1,4 +1,4 @@
-from glad.parse import Spec
+from glloader.parse import Spec
 
 
 class EGLSpec(Spec):

@@ -25,7 +25,7 @@ from contextlib import closing
 from itertools import chain
 import re
 
-from glad.opener import URLOpener
+from glloader.opener import URLOpener
 
 
 _ARRAY_RE = re.compile(r'\[\d*\]')

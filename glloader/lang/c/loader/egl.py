@@ -1,4 +1,4 @@
-from glad.lang.common.loader import BaseLoader
+from glloader.lang.common.loader import BaseLoader
 
 
 _EGL_LOADER = '''

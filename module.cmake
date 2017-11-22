@@ -1,14 +1,3 @@
-# module_gengine_opengl-loader
-
-This module is a fork of glad, a GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs.
-
-## License ##
-
-The loader-generator code is under MIT license [(Copyright, 2013 David Herberth)](LICENSE.old) and LGPL-3.0 [(Copyright, 2017 Aurora Framework)](LICENSE). Check out both licenses and see what code is affected.
-
-On every piece of code, you have a disclaimer for both copyrighted code.
-
-```python
 # ┌─┐┬ ┬┬─┐┌─┐┬─┐┌─┐  ┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬┌─┐┬─┐┬┌─
 # ├─┤│ │├┬┘│ │├┬┘├─┤  ├┤ ├┬┘├─┤│││├┤ ││││ │├┬┘├┴┐
 # ┴ ┴└─┘┴└─└─┘┴└─┴ ┴  └  ┴└─┴ ┴┴ ┴└─┘└┴┘└─┘┴└─┴ ┴
@@ -33,14 +22,4 @@ On every piece of code, you have a disclaimer for both copyrighted code.
 # the packaging of this file. Please review the following information to
 # ensure the GNU Lesser General Public License version 3 requirements
 # will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
-```
 
-The generated code is Public License.
-
-## Contribute ##
-
-Contributing is easy! Found a bug? Message me or make a pull request! Added a new generator backend?
-Make a pull request!
-
-Special thanks for all the people who contributed and are going to contribute!
-Also to these who helped me solve a problem when I simply could not think of a solution.

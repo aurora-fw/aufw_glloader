@@ -1,4 +1,4 @@
-from glad.lang.c.generator import CGenerator
+from glloader.lang.c.generator import CGenerator
 
 
 DEFAULT_DEBUG_IMPL = '''

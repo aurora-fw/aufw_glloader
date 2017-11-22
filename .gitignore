@@ -12,3 +12,5 @@ dist/
 *.egg-info
 khrplatform.h
 eglplatform.h
+include/
+src/

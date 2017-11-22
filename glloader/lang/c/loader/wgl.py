@@ -1,5 +1,5 @@
-from glad.lang.common.loader import BaseLoader
-from glad.lang.c.loader import LOAD_OPENGL_DLL, LOAD_OPENGL_DLL_H, LOAD_OPENGL_GLAPI_H
+from glloader.lang.common.loader import BaseLoader
+from glloader.lang.c.loader import LOAD_OPENGL_DLL, LOAD_OPENGL_DLL_H, LOAD_OPENGL_GLAPI_H
 
 _WGL_LOADER = \
     LOAD_OPENGL_DLL % {'pre':'static', 'init':'open_gl',
