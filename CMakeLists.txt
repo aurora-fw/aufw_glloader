@@ -1,25 +1,5 @@
-cmake_minimum_required(VERSION 2.8)
-# Silence warning about if()
-if(NOT CMAKE_VERSION VERSION_LESS 3.1)
-	cmake_policy(SET CMP0054 NEW)
-endif()
-
-project(GLAD)
-
-set(GLAD_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-set(GLAD_OUT_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-find_package(PythonInterp REQUIRED)
 
 # Options
-set(GLAD_PROFILE "compatibility" CACHE STRING "OpenGL profile")
-set(GLAD_API "" CACHE STRING "API type/version pairs, like \"gl=3.2,gles=\", no version means latest")
-set(GLAD_GENERATOR "c" CACHE STRING "Language to generate the binding for")
-set(GLAD_EXTENSIONS "" CACHE STRING "Path to extensions file or comma separated list of extensions, if missing all extensions are included")
-set(GLAD_SPEC "gl" CACHE STRING "Name of the spec")
-set(GLAD_NO_LOADER OFF CACHE BOOL "No loader")
-set(GLAD_EXPORT ON CACHE BOOL "Set export variables for external project")
-set(GLAD_INSTALL OFF CACHE BOOL "Generate installation target")
-
 if(GLAD_GENERATOR STREQUAL "d")
 	list(APPEND GLAD_SOURCES
 		"${GLAD_OUT_DIR}/glad/gl/all.d"
@@ -64,7 +44,7 @@ add_custom_command(
 		--spec=${GLAD_SPEC}
 		${GLAD_NO_LOADER_ARG}
 	WORKING_DIRECTORY ${GLAD_DIR}
-	COMMENT "Generating GLAD"
+	COMMENT "Generating Aurora GL Loader"
 )
 add_custom_target(glad-generate-files DEPENDS ${GLAD_SOURCES})
 set_source_files_properties(${GLAD_SOURCES} PROPERTIES GENERATED TRUE)
