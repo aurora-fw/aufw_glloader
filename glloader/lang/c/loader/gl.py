@@ -4,11 +4,11 @@ from glloader.lang.c.loader import LOAD_OPENGL_DLL, LOAD_OPENGL_DLL_H, LOAD_OPEN
 _OPENGL_LOADER = \
 	LOAD_OPENGL_DLL % {'pre':'static', 'init':'open_gl',
 					   'proc':'get_proc', 'terminate':'close_gl'} + '''
-int gladLoadGL(void) {
+int afwglLoadGL(void) {
 	int status = 0;
 
 	if(open_gl()) {
-		status = gladLoadGLLoader(&get_proc);
+		status = afwglLoadGLLoader(&get_proc);
 		close_gl();
 	}
 
@@ -17,10 +17,10 @@ int gladLoadGL(void) {
 '''
 
 _OPENGL_HAS_EXT = '''
-struct gladGLversionStruct GLVersion;
+struct afwglGLversionStruct GLVersion;
 
 #if defined(GL_ES_VERSION_3_0) || defined(GL_VERSION_3_0)
-#define _GLAD_IS_SOME_NEW_VERSION 1
+#define _AFW_GL_IS_SOME_NEW_VERSION 1
 #endif
 
 static int max_loaded_major;
@@ -31,11 +31,11 @@ static int num_exts_i = 0;
 static const char **exts_i = NULL;
 
 static int get_exts(void) {
-#ifdef _GLAD_IS_SOME_NEW_VERSION
+#ifdef _AFW_GL_IS_SOME_NEW_VERSION
 	if(max_loaded_major < 3) {
 #endif
 		exts = (const char *)glGetString(GL_EXTENSIONS);
-#ifdef _GLAD_IS_SOME_NEW_VERSION
+#ifdef _AFW_GL_IS_SOME_NEW_VERSION
 	} else {
 		unsigned int index;
 
@@ -80,7 +80,7 @@ static void free_exts(void) {
 }
 
 static int has_ext(const char *ext) {
-#ifdef _GLAD_IS_SOME_NEW_VERSION
+#ifdef _AFW_GL_IS_SOME_NEW_VERSION
 	if(max_loaded_major < 3) {
 #endif
 		const char *extensions;
@@ -104,7 +104,7 @@ static int has_ext(const char *ext) {
 			}
 			extensions = terminator;
 		}
-#ifdef _GLAD_IS_SOME_NEW_VERSION
+#ifdef _AFW_GL_IS_SOME_NEW_VERSION
 	} else {
 		int index;
 		if(exts_i == NULL) return 0;
@@ -124,13 +124,13 @@ static int has_ext(const char *ext) {
 
 
 _OPENGL_HEADER_START = '''
-#ifndef __glad_h_
-#define __glad_h_
+#ifndef __afw_gl_h_
+#define __afw_gl_h_
 '''
 
 _OPENGL_HEADER_INCLUDE_ERROR = '''
 #ifdef __{0}_h_
-#error {1} header already included, remove this include, glad already provides it
+#error {1} header already included, remove this include, aufw-glloader already provides it
 #endif
 #define __{0}_h_
 '''
@@ -157,18 +157,18 @@ _OPENGL_HEADER = '''
 extern "C" {
 #endif
 
-struct gladGLversionStruct {
+struct afwglGLversionStruct {
 	int major;
 	int minor;
 };
 
-typedef void* (* GLADloadproc)(const char *name);
+typedef void* (* AFWGLloadproc)(const char *name);
 ''' + LOAD_OPENGL_GLAPI_H + '''
-GLAPI struct gladGLversionStruct GLVersion;
+GLAPI struct afwglGLversionStruct GLVersion;
 '''
 
 _OPENGL_HEADER_LOADER = '''
-GLAPI int gladLoadGL(void);
+GLAPI int afwglLoadGL(void);
 ''' + LOAD_OPENGL_DLL_H
 
 _OPENGL_HEADER_END = '''

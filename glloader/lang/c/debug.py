@@ -11,21 +11,21 @@ DEFAULT_DEBUG_IMPL = '''
 
 
 DEBUG_HEADER = '''
-#define GLAD_DEBUG
-typedef void (* GLADcallback)(const char *name, void *funcptr, int len_args, ...);
+#define AFW_GL_DEBUG
+typedef void (* AFWGLcallback)(const char *name, void *funcptr, int len_args, ...);
 
-GLAPI void afw_gl_set_pre_callback(GLADcallback cb);
-GLAPI void afw_gl_set_post_callback(GLADcallback cb);
+GLAPI void afw_gl_set_pre_callback(AFWGLcallback cb);
+GLAPI void afw_gl_set_post_callback(AFWGLcallback cb);
 '''
 
 DEBUG_CODE = '''
-static GLADcallback _pre_call_callback = _pre_call_callback_default;
-void afw_gl_set_pre_callback(GLADcallback cb) {
+static AFWGLcallback _pre_call_callback = _pre_call_callback_default;
+void afw_gl_set_pre_callback(AFWGLcallback cb) {
 	_pre_call_callback = cb;
 }
 
-static GLADcallback _post_call_callback = _post_call_callback_default;
-void afw_gl_set_post_callback(GLADcallback cb) {
+static AFWGLcallback _post_call_callback = _post_call_callback_default;
+void afw_gl_set_post_callback(AFWGLcallback cb) {
 	_post_call_callback = cb;
 }
 '''
