@@ -103,6 +103,7 @@ def main():
 						choices=['gl', 'egl', 'glx', 'wgl'],
 						help='Name of the spec')
 	parser.add_argument('--no-loader', dest='no_loader', action='store_true')
+	parser.add_argument('--offline', dest='offline', action='store_true')
 	parser.add_argument('--omit-khrplatform', dest='omit_khrplatform', action='store_true',
 						help='Omits inclusion of the khrplatform.h '
 						'file which is often unnecessary. '

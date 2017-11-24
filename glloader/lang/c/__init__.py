@@ -8,21 +8,21 @@ from glloader.lang.c.debug import CDebugGenerator
 
 
 _specs = {
-    'egl': EGLCLoader,
-    'gl': OpenGLCLoader,
-    'glx': GLXCLoader,
-    'wgl': WGLCLoader
+	'egl': EGLCLoader,
+	'gl': OpenGLCLoader,
+	'glx': GLXCLoader,
+	'wgl': WGLCLoader
 }
 
 _generators = {
-    'c': CGenerator,
-    'c-debug': CDebugGenerator
+	'c': CGenerator,
+	'c-debug': CDebugGenerator
 }
 
 
 def get_generator(name, spec):
-    gen = _generators.get(name)
-    loader = _specs.get(spec)
+	gen = _generators.get(name)
+	loader = _specs.get(spec)
 
-    return gen, loader
+	return gen, loader
 

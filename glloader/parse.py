@@ -204,7 +204,6 @@ class Proto(object):
 	def __str__(self):
 		return '{self.ret} {self.name}'.format(self=self)
 
-
 class Param(object):
 	def __init__(self, element, spec):
 		self.group = element.get('group')
@@ -268,7 +267,6 @@ class OGLType(object):
 	  'struct _cl_event': 'ClEvent'
 	}
 
-	-----> error fix me
 	def to_nim(self):
 		if self.is_pointer == 2:
 			s = 'cstringArray' if self.type == 'GLchar' else 'ptr pointer'

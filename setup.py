@@ -28,10 +28,11 @@
 Aurora Framework GL Loader
 ----
 
-aufw-glloader uses the official Khronos-XML specs to generate a
+aufw-glloader is a fork of 'glad' that uses the official Khronos-XML specs to generate a
 GL/GLES/EGL/GLX/WGL Loader made for your needs.
 
 Checkout the GitHub repository: https://github.com/Dav1dde/glad
+Checkout our fork: https://github.com/aurora-fw/module_gengine_opengl-loader
 """
 
 from setuptools import setup, find_packages
