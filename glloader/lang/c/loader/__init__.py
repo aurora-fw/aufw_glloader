@@ -2,31 +2,50 @@
 LOAD_OPENGL_DLL = '''
 %(pre)s void* %(proc)s(const char *namez);
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__CYGWIN__)
 #include <windows.h>
 static HMODULE libGL;
 
 typedef void* (APIENTRYP PFNWGLGETPROCADDRESSPROC_PRIVATE)(const char*);
 static PFNWGLGETPROCADDRESSPROC_PRIVATE afwglGetProcAddressPtr;
 
+#ifdef _MSC_VER
+#ifdef __has_include
+  #if __has_include(<winapifamily.h>)
+    #define HAVE_WINAPIFAMILY 1
+  #endif
+#elif _MSC_VER >= 1700 && !_USING_V110_SDK71_
+  #define HAVE_WINAPIFAMILY
+#endif
+#endif
+
+#ifdef HAVE_WINAPIFAMILY
+  #include <winapifamily.h>
+  #if !WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) && WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
+    #define IS_UWP 1
+  #endif
+#endif
+
 %(pre)s
 int %(init)s(void) {
-	libGL = LoadLibraryW(L"opengl32.dll");
-	if(libGL != NULL) {
-		afwglGetProcAddressPtr = (PFNWGLGETPROCADDRESSPROC_PRIVATE)GetProcAddress(
-				libGL, "wglGetProcAddress");
-		return afwglGetProcAddressPtr != NULL;
-	}
+#ifndef IS_UWP
+    libGL = LoadLibraryW(L"opengl32.dll");
+    if(libGL != NULL) {
+        afwglGetProcAddressPtr = (PFNWGLGETPROCADDRESSPROC_PRIVATE)GetProcAddress(
+                libGL, "wglGetProcAddress");
+        return afwglGetProcAddressPtr != NULL;
+    }
+#endif
 
-	return 0;
+    return 0;
 }
 
 %(pre)s
 void %(terminate)s(void) {
-	if(libGL != NULL) {
-		FreeLibrary(libGL);
-		libGL = NULL;
-	}
+    if(libGL != NULL) {
+        FreeLibrary((HMODULE) libGL);
+        libGL = NULL;
+    }
 }
 #else
 #include <dlfcn.h>
@@ -40,62 +59,62 @@ static PFNGLXGETPROCADDRESSPROC_PRIVATE afwglGetProcAddressPtr;
 %(pre)s
 int %(init)s(void) {
 #ifdef __APPLE__
-	static const char *NAMES[] = {
-		"../Frameworks/OpenGL.framework/OpenGL",
-		"/Library/Frameworks/OpenGL.framework/OpenGL",
-		"/System/Library/Frameworks/OpenGL.framework/OpenGL",
-		"/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL"
-	};
+    static const char *NAMES[] = {
+        "../Frameworks/OpenGL.framework/OpenGL",
+        "/Library/Frameworks/OpenGL.framework/OpenGL",
+        "/System/Library/Frameworks/OpenGL.framework/OpenGL",
+        "/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL"
+    };
 #else
-	static const char *NAMES[] = {"libGL.so.1", "libGL.so"};
+    static const char *NAMES[] = {"libGL.so.1", "libGL.so"};
 #endif
 
-	unsigned int index = 0;
-	for(index = 0; index < (sizeof(NAMES) / sizeof(NAMES[0])); index++) {
-		libGL = dlopen(NAMES[index], RTLD_NOW | RTLD_GLOBAL);
+    unsigned int index = 0;
+    for(index = 0; index < (sizeof(NAMES) / sizeof(NAMES[0])); index++) {
+        libGL = dlopen(NAMES[index], RTLD_NOW | RTLD_GLOBAL);
 
-		if(libGL != NULL) {
+        if(libGL != NULL) {
 #ifdef __APPLE__
-			return 1;
+            return 1;
 #else
-			afwglGetProcAddressPtr = (PFNGLXGETPROCADDRESSPROC_PRIVATE)dlsym(libGL,
-				"glXGetProcAddressARB");
-			return afwglGetProcAddressPtr != NULL;
+            afwglGetProcAddressPtr = (PFNGLXGETPROCADDRESSPROC_PRIVATE)dlsym(libGL,
+                "glXGetProcAddressARB");
+            return afwglGetProcAddressPtr != NULL;
 #endif
-		}
-	}
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 %(pre)s
 void %(terminate)s(void) {
-	if(libGL != NULL) {
-		dlclose(libGL);
-		libGL = NULL;
-	}
+    if(libGL != NULL) {
+        dlclose(libGL);
+        libGL = NULL;
+    }
 }
 #endif
 
 %(pre)s
 void* %(proc)s(const char *namez) {
-	void* result = NULL;
-	if(libGL == NULL) return NULL;
+    void* result = NULL;
+    if(libGL == NULL) return NULL;
 
 #ifndef __APPLE__
-	if(afwglGetProcAddressPtr != NULL) {
-		result = afwglGetProcAddressPtr(namez);
-	}
+    if(afwglGetProcAddressPtr != NULL) {
+        result = afwglGetProcAddressPtr(namez);
+    }
 #endif
-	if(result == NULL) {
-#ifdef _WIN32
-		result = (void*)GetProcAddress(libGL, namez);
+    if(result == NULL) {
+#if defined(_WIN32) || defined(__CYGWIN__)
+        result = (void*)GetProcAddress((HMODULE) libGL, namez);
 #else
-		result = dlsym(libGL, namez);
+        result = dlsym(libGL, namez);
 #endif
-	}
+    }
 
-	return result;
+    return result;
 }
 '''
 
